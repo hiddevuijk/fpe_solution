@@ -5,35 +5,39 @@
 
 class System {
 public:
-    System(double lambda, int N, int T, std::vector<double> Pinit);
+    System(double D, int N, double dx,  std::vector<double> Pinit);
 
     void next_time(double dt);
 
-    std::vector<std::vector<double> > P;
+    std::vector<double> P;
+    std::vector<double> J;
 private:
-    double lambda;
+    double D;
+    double dx;
     int N;
-    int T;
-    int ti;
+    double t;
 };
 
-System::System(double lambda, int N, int T, std::vector<double> Pinit)
-: lambda(lambda), N(N),T(T), P(T, std::vector<double>(N,0.) ), ti(0)
+System::System(double D, int N,  double dx, std::vector<double> Pinit)
+: D(D), N(N), dx(dx), P(N,0.), J(N+1,0.), t(0)
 {
     for(int i=0; i<N; ++i)
-        P[0][i] = Pinit[i];
-
-
+        P[i] = Pinit[i];
 }
 
 void System::next_time(double dt)
 {
-    for(int i=1; i<N-1; ++i) {
-        P[ti+1][i] = P[ti][i] +
-                 lambda*( P[ti][i-1] - 2*P[ti][i] + P[ti][i+1] );
+    for(int i=1; i<N; ++i) {
+        J[i] = D*(P[i-1] - P[i])/dx;    
     }
-    ++ti;
+    // implement boundary
+    // now open boundaries
+    J[0] = 0;//D*P[0];
+    J[N] = 0;//-D*P[N-1];
 
+    for(int i=0;i<N; ++i) {
+        P[i] += dt*(J[i] - J[i+1])/dx;
+    }
 }
 
 
