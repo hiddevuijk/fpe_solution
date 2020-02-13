@@ -39,10 +39,10 @@ void System::next_flux()
     for(int i=1; i<N; ++i) {
         // Bulk
         j0[i] = -d*( rho[i] - rho[i-1] )/dx;
-        j0[i] += v*(sigma[i] + sigma[i-1])/(2*dx);
+        j0[i] += v*(sigma[i] + sigma[i-1])/2;
 
         j1[i] = -d*(sigma[i] - sigma[i-1])/dx;
-        j1[i] += v*(rho[i] + rho[i-1])/(2*dx);
+        j1[i] += v*(rho[i] + rho[i-1])/2;
 
     }
 
