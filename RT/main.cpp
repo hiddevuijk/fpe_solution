@@ -12,8 +12,10 @@ int main()
 
 
     double k = 1.;
-    double v = 1.;
-    double d = .1;
+    double v0 = 0.;
+    double vp = 1.;
+    double x0 = -2.5;
+    double d = 1.;
     double alpha = .1;
 
     double D = 1.;
@@ -26,21 +28,24 @@ int main()
     double time = 10;
     int T = time/dt;
 
-    vector<double> rhoInit(N,0.0);
+
+    vector<double> rhoInit(N,1./L);
     vector<double> sigmaInit(N,0.0);
     vector<double> PInit(N,0);
 
-    rhoInit[(int) N/2 ] = 1./dx;
 
-    System system(k,v,d,alpha,D,L,dt,dx,N, rhoInit, sigmaInit, PInit);
+    System system(k,v0, vp, x0, d,alpha,D,L,dt,dx,N, rhoInit, sigmaInit, PInit);
 
     for(int i=0; i<T; ++i) 
         system.next_time();
 
-    for(int i=0;i<N;++i) {
+    for(int i=0;i<N; ++i) {
         cout <<  0.5*dx -L/2. + i*dx << '\t'
-             << system.rho[i] << '\t'
-             << system.sigma[i] << endl;
+             << system.get_rho()[i] << '\t'
+             << system.get_sigma()[i] << '\t'
+             << system.get_j0()[i] << '\t'
+             << system.get_j1()[i] << '\n';
+
     }
 
 
