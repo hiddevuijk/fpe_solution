@@ -6,7 +6,7 @@ from analytical import rho
 
 L = 5.
 alpha = .1
-d = .1
+d = 1.
 v = 1.
 
 
@@ -25,7 +25,10 @@ plt.plot(x,y)
 plt.legend()
 
 plt.show()
-exit()
-plt.subplot(1,2,2)
-plt.plot(data[:,0], data[:,2], label="sigma")
+
+#plt.subplot(1,2,2)
+plt.plot(data[:,0], data[:,2]/data[:,1], label="sigma/rho")
+plt.legend()
 plt.show()
+
+
