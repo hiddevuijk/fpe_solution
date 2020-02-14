@@ -18,10 +18,10 @@ y = rho(x,alpha, v, d,L)
 norm = simps(data[:,1], data[:,0])
 
 #plt.subplot(1,2,1)
-plt.ylim([0,1.])
+#plt.ylim([0,1.])
 
 plt.plot(data[:,0],data[:,1]/norm, label="rho sim")
-plt.plot(x,y)
+#plt.plot(x,y)
 plt.legend()
 
 plt.show()
