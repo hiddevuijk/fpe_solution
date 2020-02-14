@@ -10,11 +10,11 @@ $(TARGET): $(OBJS)
 	$(CC) $(LFLAGS)  $(OBJS) -o $(TARGET)
 
 
-system.o: system.cpp system.h 
+system.o: system.cpp system.h swimspeed.h potential.h
 	$(CC) $(CFLAGS) system.cpp
 
 
-main.o: main.cpp  system.h 
+main.o: main.cpp  system.h swimspeed.h potential.h
 	$(CC) $(CFLAGS) main.cpp
 
 

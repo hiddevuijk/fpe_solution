@@ -1,15 +1,17 @@
 #ifndef GUARD_SYSTEM_H
 #define GUARD_SYSTEM_H
 
+#include "swimspeed.h"
+#include "potential.h"
+
 #include <vector>
 
 class System {
 public:
-    System(double k, double v0, double vp, double x0, double d, double alpha,
-            double D, double L, double dt, double dx, int N,
+    System( Swimspeed swimspeed, Potential potential,
+            double d, double L, double dt, double dx, int N,
             std::vector<double> rhoInit,
-            std::vector<double> sigmaInit,
-            std::vector<double> PInit);
+            std::vector<double> sigmaInit);
 
     void next_time();
 
@@ -20,23 +22,26 @@ public:
 
 private:
 
+    // PRIVATE MEMBER FUNCTIONS
     void next_flux();
     void next_prob();
 
-    double k;       // spring const.
-    double v0;      // swim speed
-    double vp;      // slope swim speed
-    double x0;      // zero of swim speed
+
+    // SYSTEM PARAMETERS
+    Swimspeed swimspeed;
+    Potential potential;
+
     double d;       // diff. const. of RT
     double alpha;   // tumble rate
 
-    double D;       // diff. const. of heavy particle
 
     double L;       // system size
     double dt;      // time step
     double dx;      // bin size
     int N;          // number of bins
 
+
+    // THE STATE OF THE SYSTEM
 
     // bin centers
     std::vector<double> x;
@@ -48,10 +53,6 @@ private:
     std::vector<double> sigma;
     // first moment of the flux
     std::vector<double> j1;
-    // prob. density of the heavy particle
-    std::vector<double> P;
-    // flux of the heavy particle
-    std::vector<double> J;
 
 };
 
