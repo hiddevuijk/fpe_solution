@@ -7,6 +7,7 @@ System::System( Swimspeed swimspeed, Potential potential,
                 vector<double> rhoInit, vector<double> sigmaInit)
 : swimspeed(swimspeed), potential(potential) , d(d), L(L), dt(dt), dx(dx), N(N),
     x(N), rho(N), j0(N+1), sigma(N), j1(N+1)
+\end{column}
 {
 
     for(int i=0; i<N; ++i) {

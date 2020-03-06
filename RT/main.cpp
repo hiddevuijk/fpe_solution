@@ -13,13 +13,13 @@ int main()
 {
 
 
-    double k = 20.;
+    double k = 1.;
     double kx0 = 0;
-    double v0 = 50.;
+    double v0 = 5.;
     double vp = 0.;
     double vx0 = -2.5;
     double d = 1.;
-    double alpha = 4.;
+    double alpha = 40.;
 
 
     double L = 10.;
@@ -47,7 +47,6 @@ int main()
              << system.get_sigma()[i] << '\t'
              << system.get_j0()[i] << '\t'
              << system.get_j1()[i] << '\n';
-
     }
 
 
