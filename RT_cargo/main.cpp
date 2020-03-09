@@ -16,36 +16,36 @@ int main()
 {
 
     // potential
-    double k = 0.;
+    double k = 1.;
 
     // swim/ tumble
     double v0 = 0.;
-    double vp = 0.;
-    double vx0 = 0;
-    double alpha = 4.;
+    double vp = 1.;
+    double vx0 = 0.;
+    double alpha = 10.;
 
     // diffusion
-    double gamma = 1.;
-    double Gamma = 1.;
+    double gamma = 5.;
+    double Gamma = .5;
     double temp = 1.;
 
     
 
     double Lx = 10.;
-    int Nx = 51;
+    int Nx = 50;
     double dx = Lx/Nx;
 
     double Ly = 10.;
     int Ny = 51;
     double dy = Ly/Ny;
 
-    double dt   = 0.00000001;
-    double time = .05;
+    double dt   = 0.00001;
+    double time = 10.;
     int T = time/dt;
   
 
     vector<vector<double> > rInit(Nx, vector<double>(Ny,0));
-    rInit[25][25] = 1./(Lx*Ly);
+    rInit[25][25] = 1.;
     vector<vector<double> > sInit(Nx, vector<double>(Ny,0));
 
 
@@ -60,12 +60,20 @@ int main()
         t += dt;
         ti += 1;
 
-        if( (ti % 100000) == 0) cout << T << '\t' << ti << endl;
+        if( (ti % int(T/10)) == 0) cout << T << '\t' << ti << endl;
     }
 
     ofstream out_r("r.dat");
     system.save_r(out_r);
 
+    ofstream out_s("s.dat");
+    system.save_s(out_s);
+
+    ofstream out_x("x.dat");
+    system.save_x(out_x);
+
+    ofstream out_y("y.dat");
+    system.save_y(out_y);
     return 0;
 }
 

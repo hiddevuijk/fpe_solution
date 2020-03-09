@@ -25,6 +25,8 @@ public:
 
     void save_r(std::ofstream& out) const;
     void save_s(std::ofstream& out) const;
+    void save_x(std::ofstream& out) const;
+    void save_y(std::ofstream& out) const;
 
 private:
 
