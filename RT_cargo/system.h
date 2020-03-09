@@ -10,7 +10,8 @@
 class System {
 public:
     System( Swimspeed swimspeed, Potential potential,
-            double gamma, double Gamma, double temp, int Nx, double dx, int Ny, double dy, double dt,
+            double gamma, double Gamma, double temp,
+			int Nx, double dx, int Ny, double dy, double dt,
             std::vector<std::vector<double> > rInit,
             std::vector<std::vector<double> > sInit);
 

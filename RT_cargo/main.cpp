@@ -22,26 +22,30 @@ int main()
     double v0 = 0.;
     double vp = 1.;
     double vx0 = 0.;
-    double alpha = 10.;
+    double alpha = 20.;
 
     // diffusion
-    double gamma = 5.;
-    double Gamma = .5;
+    double gamma = .5;
+    double Gamma = 2.;
     double temp = 1.;
 
     
 
-    double Lx = 10.;
-    int Nx = 50;
+    double Lx = 15.;
+    int Nx = 101;
     double dx = Lx/Nx;
 
     double Ly = 10.;
-    int Ny = 51;
+    int Ny = 101;
     double dy = Ly/Ny;
 
-    double dt   = 0.00001;
-    double time = 10.;
+    double dt   = 0.001;
+    double time = 50.;
     int T = time/dt;
+
+	cout << "Neumann criterion: \n";	
+	cout << "x: \t" << temp*dt/(gamma*dx*dx) << "\n";	
+	cout << "y: \t" << temp*dt/(Gamma*dy*dy) << "\n";	
   
 
     vector<vector<double> > rInit(Nx, vector<double>(Ny,0));

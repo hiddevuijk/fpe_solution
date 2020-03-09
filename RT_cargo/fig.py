@@ -29,12 +29,17 @@ rxavg = simps(x*rx, x)
 plt.subplot(2,1,1)
 plt.plot(y,ry, label="r")
 plt.axvline(ryavg)
+
+plt.ylim([0,1.1*max(ry)])
+
 plt.legend()
 plt.title(ryavg)
 
 plt.subplot(2,1,2)
 plt.plot(x,rx, label="r")
 plt.axvline(rxavg)
+
+plt.ylim([0,1.1*max(rx)])
 plt.legend()
 plt.title(rxavg)
 
