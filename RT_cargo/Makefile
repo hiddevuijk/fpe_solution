@@ -14,7 +14,7 @@ system.o: system.cpp system.h swimspeed.h potential.h
 	$(CC) $(CFLAGS) system.cpp
 
 
-main.o: main.cpp  system.h swimspeed.h potential.h
+main.o: main.cpp  system.h swimspeed.h potential.h ConfigFile.h
 	$(CC) $(CFLAGS) main.cpp
 
 

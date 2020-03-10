@@ -3,6 +3,8 @@
 #include "swimspeed.h"
 #include "potential.h"
 
+#include "ConfigFile.h"
+
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -15,39 +17,36 @@ typedef vector<vector<double> > matrix;
 
 int main()
 {
-
+    ConfigFile config("input.txt");
     // system size
-    double Lx = 10.;
-    int Nx = 101;
+    double Lx = config.read<double>("Lx");
+    int Nx = config.read<int>("Nx");
     double dx = Lx/Nx;
 
-    double Ly = 10.;
-    int Ny = 101;
+    double Ly = config.read<double>("Ly");
+    int Ny = config.read<int>("Ny");
     double dy = Ly/Ny;
 
     // potential
-    double k = 1.;
+    double k = config.read<double>("k");
 
     // swim/ tumble
-    double v0 = 10.;
-    double vp = 2*v0/Lx;
-    double vx0 = 0.;
-
-    //double v0 = 0.;
-    //double vp = 1;
-    //double vx0 = -Lx/2.;
-
-    double alpha = 10.;
+    double v0 = config.read<double>("v0");
+    double vp = config.read<double>("vp");
+    double vx0 = config.read<double>("vx0");
+    double alpha = config.read<double>("alpha");
 
     // diffusion
-    double gamma = .5;
-    double Gamma = 10.;
-    double temp = 1.;
+    double gamma = config.read<double>("gamma");
+    double Gamma = config.read<double>("Gamma");
+    double temp = config.read<double>("temp");
 
     // integration time 
-    double dt   = 0.001;
-    double time = 100.;
-    int T = time/dt;
+    double dt   = config.read<double>("dt");
+    double time = config.read<double>("time");
+    
+    int Nprint = config.read<int>("Nprint");
+    int Nsave = config.read<int>("Nsave");
 
 	cout << "Neumann criterion: \n";	
 	cout << "x: \t" << temp*dt/(gamma*dx*dx) << "\n";	
@@ -66,11 +65,11 @@ int main()
     double t = 0;
     int ti = 0;
     int ni = 0;
-    while( ti< T ) {
+    while( t < time ) {
 
-        if( (ti % int(T/10)) == 0) {
+        if( (ti % Nprint) == 0) cout << int(time/dt) << '\t' << ti << endl;
+        if( (ti % Nsave) == 0) {
             
-            cout << T << '\t' << ti << endl;
 
             stringstream sr;
             sr << "r" << ni << ".dat";

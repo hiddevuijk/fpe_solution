@@ -20,7 +20,7 @@ ymin = y[0]
 ymax = y[-1]
 
 #plt.subplot(1,2,1)
-plt.imshow(r.T, origin='lower', extent=[xmin,xmax,ymin,ymax])
+plt.imshow(r.T, origin='lower', extent=[xmin,xmax,ymin,ymax], interpolation='none', aspect='auto')
 plt.colorbar()
 
 #plt.subplot(1,2,2)
