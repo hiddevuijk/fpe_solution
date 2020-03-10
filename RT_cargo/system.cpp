@@ -20,10 +20,9 @@ System::System( Swimspeed swimspeed, Potential potential,
     d = temp/gamma;
     D = temp/Gamma;
     for(int xi=0; xi<Nx; ++xi) {
-        x[xi] = 0.5*dx + dx*xi;
-
+        x[xi] = -Nx*dx/2. + 0.5*dx + dx*xi; 
         for(int yi=0; yi<Ny; ++yi) {
-            y[yi] = 0.5*dy + dy*yi;
+            y[yi] = -Ny*dy/2. + 0.5*dy + dy*yi;
 
             r[xi][yi] =  rInit[xi][yi];
             s[xi][yi] =  sInit[xi][yi];

@@ -4,6 +4,7 @@
 #include "potential.h"
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <vector>
 
@@ -15,23 +16,8 @@ typedef vector<vector<double> > matrix;
 int main()
 {
 
-    // potential
-    double k = 1.;
-
-    // swim/ tumble
-    double v0 = 0.;
-    double vp = 1.;
-    double vx0 = 0.;
-    double alpha = 20.;
-
-    // diffusion
-    double gamma = .5;
-    double Gamma = 2.;
-    double temp = 1.;
-
-    
-
-    double Lx = 15.;
+    // system size
+    double Lx = 10.;
     int Nx = 101;
     double dx = Lx/Nx;
 
@@ -39,8 +25,28 @@ int main()
     int Ny = 101;
     double dy = Ly/Ny;
 
+    // potential
+    double k = 1.;
+
+    // swim/ tumble
+    double v0 = 10.;
+    double vp = 2*v0/Lx;
+    double vx0 = 0.;
+
+    //double v0 = 0.;
+    //double vp = 1;
+    //double vx0 = -Lx/2.;
+
+    double alpha = 10.;
+
+    // diffusion
+    double gamma = .5;
+    double Gamma = 10.;
+    double temp = 1.;
+
+    // integration time 
     double dt   = 0.001;
-    double time = 50.;
+    double time = 100.;
     int T = time/dt;
 
 	cout << "Neumann criterion: \n";	
@@ -49,7 +55,7 @@ int main()
   
 
     vector<vector<double> > rInit(Nx, vector<double>(Ny,0));
-    rInit[25][25] = 1.;
+    rInit[int(Nx/2.)][int(Ny/2.)] = 1.;
     vector<vector<double> > sInit(Nx, vector<double>(Ny,0));
 
 
@@ -59,12 +65,30 @@ int main()
 
     double t = 0;
     int ti = 0;
+    int ni = 0;
     while( ti< T ) {
+
+        if( (ti % int(T/10)) == 0) {
+            
+            cout << T << '\t' << ti << endl;
+
+            stringstream sr;
+            sr << "r" << ni << ".dat";
+            ofstream out_r(sr.str());
+            system.save_r(out_r);
+
+            stringstream ss;
+            ss << "s" << ni << ".dat";
+            ofstream out_s(ss.str());
+            system.save_s(out_s);
+
+            ni += 1;
+
+        }
+
         system.next_time();
         t += dt;
         ti += 1;
-
-        if( (ti % int(T/10)) == 0) cout << T << '\t' << ti << endl;
     }
 
     ofstream out_r("r.dat");
