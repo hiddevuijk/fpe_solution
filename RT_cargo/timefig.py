@@ -26,7 +26,7 @@ for ni in range(1,10):
 
 
     plt.plot(y,ry, label="r " + str(ni), color=c[ni%len(c)])
-    plt.axvline(ryavg, color=c[ni%len(c)])
+    #plt.axvline(ryavg, color=c[ni%len(c)])
 
 
 plt.legend()

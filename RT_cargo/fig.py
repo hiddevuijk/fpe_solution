@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sys import exit
 from scipy.integrate import simps
+from sys import exit
 
 L = 10.
 alpha = 0
@@ -21,6 +22,7 @@ rx = np.sum(r, axis = 1 )
 norm = simps(ry,y)
 ry /= norm
 ryavg = simps(y*ry, y)
+#print(ryavg)
 
 norm = simps(rx,x)
 rx /= norm
@@ -31,15 +33,18 @@ plt.plot(y,ry, label="r")
 plt.axvline(ryavg)
 
 plt.ylim([0,1.1*max(ry)])
+plt.xlim([min(y),max(y)])
 
 plt.legend()
 plt.title(ryavg)
+
 
 plt.subplot(2,1,2)
 plt.plot(x,rx, label="r")
 plt.axvline(rxavg)
 
 plt.ylim([0,1.1*max(rx)])
+plt.xlim([min(x),max(x)])
 plt.legend()
 plt.title(rxavg)
 
