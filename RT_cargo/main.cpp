@@ -41,6 +41,8 @@ int main()
     double Gamma = config.read<double>("Gamma");
     double temp = config.read<double>("temp");
 
+    bool periodic = config.read<bool>("periodic");
+
     // integration time 
     double dt   = config.read<double>("dt");
     double time = config.read<double>("time");
@@ -60,7 +62,8 @@ int main()
 
     Swimspeed swimspeed(v0, vp, vx0, alpha);
     Potential potential(k);
-    System system(swimspeed, potential, gamma, Gamma, temp, Nx, dx, Ny, dy, dt, rInit, sInit);
+    System system(swimspeed, potential, gamma, Gamma, temp,periodic,
+                 Nx, dx, Ny, dy, dt, rInit, sInit);
 
     double t = 0;
     int ti = 0;

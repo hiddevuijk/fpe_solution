@@ -10,7 +10,7 @@
 class System {
 public:
     System( Swimspeed swimspeed, Potential potential,
-            double gamma, double Gamma, double temp,
+            double gamma, double Gamma, double temp, bool periodic,
 			int Nx, double dx, int Ny, double dy, double dt,
             std::vector<std::vector<double> > rInit,
             std::vector<std::vector<double> > sInit);
@@ -33,7 +33,9 @@ private:
 
     // PRIVATE MEMBER FUNCTIONS
     void next_flux();
+    void next_flux_pbc();
     void next_prob();
+    void next_prob_pbc();
 
 
     // SYSTEM PARAMETERS
@@ -45,6 +47,7 @@ private:
     double d, D;       // diff. const. of RT
     double temp;
 
+    bool periodic;  // periodic BC
     double Lx, Ly;       // system size
     int Nx;          // number of bins
     double dx;

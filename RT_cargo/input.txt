@@ -3,6 +3,7 @@ Lx = 10.
 Nx = 101
 Ly = 10.
 Ny = 51
+periodic = 0
 
 # potential
 k = 10.
