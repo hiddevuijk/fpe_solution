@@ -20,9 +20,9 @@ main.o: main.cpp  system.h swimspeed.h potential.h ConfigFile.h
 
 .PHONY: clean
 clean:
-	rm -f  $(OBJS) $(TARGET) 
+	rm -f  $(OBJS)
 
 .PHONY: cleanObject
-cleanObject:
-	rm -f  $(OBJS)
+cleanAll:
+	rm -f  $(OBJS) $(TARGET)
 
