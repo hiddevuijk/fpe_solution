@@ -70,7 +70,7 @@ int main()
     int ni = 0;
     while( t < time ) {
 
-        if( (ti % Nprint) == 0) cout << int(time/dt) << '\t' << ti << endl;
+        if( (ti % int( time/(dt*Nprint) ) ) == 0) cout << int(time/dt) << '\t' << ti << endl;
         if( (ti % Nsave) == 0) {
             
 
