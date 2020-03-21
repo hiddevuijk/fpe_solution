@@ -7,11 +7,11 @@ public:
             : v0(v0), vp(vp), x0(x0), alpha(alpha) {}
 
 
-    double v(double x) const { return v0 + vp*(x-x0); }
-    //double v(double x) const {
-    //        if(x > x0 ) return v0 - vp*(x-x0);
-    //        else return v0 + vp*(x-x0);
-    //}
+    //double v(double x) const { return v0 + vp*(x-x0); }
+    double v(double x) const {
+            if(x > x0 ) return v0 - vp*(x-x0);
+            else return v0 + vp*(x-x0);
+    }
     double get_alpha() const { return alpha; }
 
 private:

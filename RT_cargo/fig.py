@@ -50,5 +50,6 @@ plt.title(rxavg)
 
 
 plt.tight_layout()
+plt.savefig("fig5.pdf")
 plt.show()
 

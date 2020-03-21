@@ -72,8 +72,6 @@ int main()
 
         if( (ti % int( time/(dt*Nprint) ) ) == 0) cout << int(time/dt) << '\t' << ti << endl;
         if( (ti % Nsave) == 0) {
-            
-
             stringstream sr;
             sr << "r" << ni << ".dat";
             ofstream out_r(sr.str());

@@ -35,11 +35,11 @@ System::System( Swimspeed swimspeed, Potential potential,
 void System::next_time()
 {
     if( periodic ) {
-        next_flux();
-        next_prob();
-    } else {
         next_flux_pbc();
         next_prob_pbc();
+    } else {
+        next_flux();
+        next_prob();
     }
 }
 
@@ -149,52 +149,31 @@ void System::save_s( std::ofstream& out ) const
 
 void System::next_flux_pbc()
 {
-
-
-    // Boundary conditions
-
     for(int xi=0; xi<Nx+1; ++xi) {
-            jy0[xi][0] = 0;
-            jy0[xi][Ny] = 0;
 
-            jy1[xi][0] = 0;
-            jy1[xi][Ny] = 0;
-    }
-    
-    for(int yi=0; yi<Ny+1; ++yi) {
-            jx0[0][yi] = 0;
-            jx0[Nx][yi] = 0;
+        double xmid = x[xi%Nx]-0.5*dx;
 
-            jx1[0][yi] = 0;
-            jx1[Nx][yi] = 0;
-    }
+        for(int yi=0; yi<Ny+1; ++yi) {
 
+            double ymid = y[yi%Nx]-0.5*dy;
+			if(xi != 0) {
+			jx0[xi][yi]  = swimspeed.v(xmid)*(s[xi-1][yi%Ny] + s[xi%Nx][yi%Ny])/2;
+			jx0[xi][yi] -= d*(r[xi%Nx][yi%Ny] - r[xi-1][yi%Ny])/dx;
+			jx0[xi][yi] += potential.F(xmid, y[yi%Ny])*( r[xi-1][yi%Ny] + r[xi%Nx][yi%Ny])/(2*gamma);
 
-    // bulk
-    for(int xi=0; xi<Nx; ++xi) {
-        double xmid = x[xi]-0.5*dx;
-        for(int yi=0; yi<Ny; ++yi) {
-            double ymid = y[yi]-0.5*dy;
+			jx1[xi][yi]  = swimspeed.v(xmid)*(r[xi-1][yi%Ny] + r[xi%Nx][yi%Ny])/2;
+			jx1[xi][yi] -= d*(s[xi%Nx][yi%Ny] - s[xi-1][yi%Ny])/dx;
+			jx1[xi][yi] += potential.F(xmid, y[yi%Ny])*( s[xi-1][yi%Ny] + s[xi%Nx][yi%Ny])/(2*gamma);
+			}
+			if(yi!=0) {
+			jy0[xi][yi]  = 0;
+			jy0[xi][yi] -= D*(r[xi%Nx][yi%Ny] - r[xi%Nx][yi-1])/dy; 
+			jy0[xi][yi] -= potential.F(x[xi%Nx], ymid)*( r[xi%Nx][yi-1] + r[xi%Nx][yi%Ny])/(2*Gamma);
 
-            if( xi != 0 and xi != Nx ) {
-                jx0[xi][yi]  = swimspeed.v(xmid)*(s[xi-1][yi] + s[xi][yi])/2;
-                jx0[xi][yi] -= d*(r[xi][yi] - r[xi-1][yi])/dx;
-                jx0[xi][yi] += potential.F(xmid, y[yi])*( r[xi-1][yi] + r[xi][yi])/(2*gamma);
-
-                jx1[xi][yi]  = swimspeed.v(xmid)*(r[xi-1][yi] + r[xi][yi])/2;
-                jx1[xi][yi] -= d*(s[xi][yi] - s[xi-1][yi])/dx;
-                jx1[xi][yi] += potential.F(xmid, y[yi])*( s[xi-1][yi] + s[xi][yi])/(2*gamma);
-            }
-
-            if( yi != 0 and yi != Ny ) {
-                jy0[xi][yi]  = 0;
-                jy0[xi][yi] -= D*(r[xi][yi] - r[xi][yi-1])/dy; 
-                jy0[xi][yi] -= potential.F(x[xi], ymid)*( r[xi][yi-1] + r[xi][yi])/(2*Gamma);
-
-                jy1[xi][yi]  = 0;
-                jy1[xi][yi] -= D*(s[xi][yi] - s[xi][yi-1])/dy; 
-                jy1[xi][yi] -= potential.F(x[xi], ymid)*( s[xi][yi-1] + s[xi][yi])/(2*Gamma);
-            }
+			jy1[xi][yi]  = 0;
+			jy1[xi][yi] -= D*(s[xi%Nx][yi%Ny] - s[xi%Nx][yi-1])/dy; 
+			jy1[xi][yi] -= potential.F(x[xi%Nx], ymid)*( s[xi%Nx][yi-1] + s[xi%Nx][yi%Ny])/(2*Gamma);
+			}
 
         }
     }
@@ -203,16 +182,14 @@ void System::next_flux_pbc()
 
 void System::next_prob_pbc()
 {
-
-
     for(int xi=0; xi<Nx; ++xi) {
         for(int yi=0; yi<Ny; ++yi) {
-            r[xi][yi] -= dt*( jx0[xi+1][yi] - jx0[xi][yi] )/dx;
-            r[xi][yi] -= dt*( jy0[xi][yi+1] - jy0[xi][yi] )/dy;
+            r[xi][yi] -= dt*( jx0[(xi+1)%Nx][yi] - jx0[xi][yi] )/dx;
+            r[xi][yi] -= dt*( jy0[xi][(yi+1)%Ny] - jy0[xi][yi] )/dy;
 
             s[xi][yi] -= dt*swimspeed.get_alpha()*s[xi][yi];
-            s[xi][yi] -= dt*( jx1[xi+1][yi] - jx1[xi][yi] )/dx;
-            s[xi][yi] -= dt*( jy1[xi][yi+1] - jy1[xi][yi] )/dy;
+            s[xi][yi] -= dt*( jx1[(xi+1)%Nx][yi] - jx1[xi][yi] )/dx;
+            s[xi][yi] -= dt*( jy1[xi][(yi+1)%Ny] - jy1[xi][yi] )/dy;
 
         }
     }

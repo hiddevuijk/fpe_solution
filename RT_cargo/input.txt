@@ -6,22 +6,22 @@ Ny = 51
 periodic = 0
 
 # potential
-k = 10.
+k = 5.
 
 #swims tumble
-v0 = 0.
-vp = 7.
-vx0 = -5.
-alpha = 10.
+v0 = 10.
+vp = 2.
+vx0 = 0
+alpha = 20.
 
 #diffusion
-gamma = .5
-Gamma = 10.
+gamma = .1
+Gamma = 2.
 temp = 1.
 
 #integration
 dt = 0.0001
-time = 10.
+time = 300.
 
-Nprint = 10000
-Nsave = 10000
+Nprint = 10
+Nsave = 1000000
