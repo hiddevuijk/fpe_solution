@@ -15,8 +15,10 @@ public:
             std::vector<std::vector<double> > rInit,
             std::vector<std::vector<double> > sInit);
 
+	// increment one time step
     void next_time();
 
+	// get state of the system
     const std::vector<std::vector<double> >& get_r() const { return r;}
     const std::vector<std::vector<double> >& get_s() const { return s;}
     const std::vector<std::vector<double> >& get_jx0() const { return jx0;}
@@ -24,6 +26,7 @@ public:
     const std::vector<std::vector<double> >& get_jx1() const { return jx1;}
     const std::vector<std::vector<double> >& get_jy1() const { return jy1;}
 
+	// write the state to file
     void save_r(std::ofstream& out) const;
     void save_s(std::ofstream& out) const;
     void save_x(std::ofstream& out) const;
@@ -71,7 +74,6 @@ private:
     // first moment of the flux
     std::vector<std::vector<double> > jx1;
     std::vector<std::vector<double> > jy1;
-
 
 
 };
