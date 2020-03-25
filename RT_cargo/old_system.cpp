@@ -11,11 +11,11 @@ System::System( Swimspeed swimspeed, Potential potential,
     periodic(periodic), Nx(Nx), dx(dx), Ny(Ny), dy(dy),
     dt(dt), x(Nx), y(Ny),
     r( Nx, std::vector<double>(Ny) ),
-    jx0( Nx+1, std::vector<double>(Ny) ),
-    jy0( Nx, std::vector<double>(Ny+1) ),
+    jx0( Nx+1, std::vector<double>(Ny+1) ),
+    jy0( Nx+1, std::vector<double>(Ny+1) ),
     s( Nx, std::vector<double>(Ny) ),
-    jx1( Nx+1, std::vector<double>(Ny) ),
-    jy1( Nx, std::vector<double>(Ny+1) )
+    jx1( Nx+1, std::vector<double>(Ny+1) ),
+    jy1( Nx+1, std::vector<double>(Ny+1) )
 {
 
     d = temp/gamma;
@@ -49,7 +49,7 @@ void System::next_flux()
 
 
     // Boundary conditions
-    for(int xi=0; xi<Nx; ++xi) {
+    for(int xi=0; xi<Nx+1; ++xi) {
             jy0[xi][0] = 0;
             jy0[xi][Ny] = 0;
 
@@ -57,7 +57,7 @@ void System::next_flux()
             jy1[xi][Ny] = 0;
     }
     
-    for(int yi=0; yi<Ny; ++yi) {
+    for(int yi=0; yi<Ny+1; ++yi) {
             jx0[0][yi] = 0;
             jx0[Nx][yi] = 0;
 
@@ -72,7 +72,7 @@ void System::next_flux()
         for(int yi=0; yi<Ny; ++yi) {
             double ymid = y[yi]-0.5*dy;
 
-            if( xi != 0) {
+            if( xi != 0 and xi != Nx ) {
                 jx0[xi][yi]  = swimspeed.v(xmid)*(s[xi-1][yi] + s[xi][yi])/2;
                 jx0[xi][yi] -= d*(r[xi][yi] - r[xi-1][yi])/dx;
                 jx0[xi][yi] += potential.F(xmid, y[yi])*( r[xi-1][yi] + r[xi][yi])/(2*gamma);
@@ -82,7 +82,7 @@ void System::next_flux()
                 jx1[xi][yi] += potential.F(xmid, y[yi])*( s[xi-1][yi] + s[xi][yi])/(2*gamma);
             }
 
-            if( yi != 0 ) {
+            if( yi != 0 and yi != Ny ) {
                 jy0[xi][yi]  = 0;
                 jy0[xi][yi] -= D*(r[xi][yi] - r[xi][yi-1])/dy; 
                 jy0[xi][yi] -= potential.F(x[xi], ymid)*( r[xi][yi-1] + r[xi][yi])/(2*Gamma);
