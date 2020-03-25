@@ -38,7 +38,6 @@ private:
     void next_flux();
     void next_flux_pbc();
     void next_prob();
-    void next_prob_pbc();
 
 
     // SYSTEM PARAMETERS

@@ -36,11 +36,11 @@ void System::next_time()
 {
     if( periodic ) {
         next_flux_pbc();
-        next_prob_pbc();
     } else {
         next_flux();
-        next_prob();
     }
+
+	next_prob();
 }
 
 
@@ -114,6 +114,16 @@ void System::next_prob()
     }
 }
 
+void System::next_flux_pbc()
+{
+}
+
+
+/*
+	Save the state of the function
+*/
+
+
 
 void System::save_r( std::ofstream& out ) const
 {
@@ -144,16 +154,6 @@ void System::save_s( std::ofstream& out ) const
     }
    
 }
-
-
-void System::next_flux_pbc()
-{
-}
-
-void System::next_prob_pbc()
-{
-}
-
 
 
 void System::save_x( std::ofstream& out ) const
