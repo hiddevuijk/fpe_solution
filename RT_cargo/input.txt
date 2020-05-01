@@ -1,27 +1,27 @@
 # box size 
-Lx = 20.
-Nx = 101
+Lx = 10.
+Nx = 51
 Ly = 10.
-Ny = 201
-periodic = 0
+Ny = 51
+periodic = 1
 
 # potential
-k = 5.
+k = 1.
 
 #swims tumble
 v0 = 0.
-vp = 2.
-vx0 = -10
+vp = 0.
+vx0 = 0
 alpha = 20.
 
 #diffusion
-gamma = 0.5
-Gamma = 5.
+gamma =	1.
+Gamma = 1.
 temp = 1.
 
 #integration
-dt = 0.0001
-time = 100.
+dt = 0.001
+time = 50.
 
 Nprint = 10
-Nsave = 1000000
+Nsave = 5

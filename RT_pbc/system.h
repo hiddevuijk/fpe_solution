@@ -10,23 +10,36 @@
 class System {
 public:
     System( Swimspeed swimspeed, Potential potential,
-            double gamma, double Gamma, double temp, bool periodic,
+            double gamma, double Gamma, double temp,
 			int Nx, double dx, int Ny, double dy, double dt,
-            std::vector<std::vector<double> > rInit,
-            std::vector<std::vector<double> > sInit);
+            const std::vector<std::vector<double> >& rInit,
+            const std::vector<std::vector<double> >& sInit);
 
 	// increment one time step
     void next_time();
 
 	// get state of the system
-    const std::vector<std::vector<double> >& get_r() const { return r;}
-    const std::vector<std::vector<double> >& get_s() const { return s;}
-    const std::vector<std::vector<double> >& get_jx0() const { return jx0;}
-    const std::vector<std::vector<double> >& get_jy0() const { return jy0;}
-    const std::vector<std::vector<double> >& get_jx1() const { return jx1;}
-    const std::vector<std::vector<double> >& get_jy1() const { return jy1;}
+    std::vector<std::vector<double> > get_r() const { return r;}
+	std::vector<double> get_rx() const;
+	std::vector<double> get_ry() const;
+    std::vector<std::vector<double> > get_s() const { return s;}
+    std::vector<std::vector<double> > get_jx0() const { return jx0;}
+    std::vector<std::vector<double> > get_jy0() const { return jy0;}
+    std::vector<std::vector<double> > get_jx1() const { return jx1;}
+    std::vector<std::vector<double> > get_jy1() const { return jy1;}
+
+	double get_r(int xi, int yi) const { return r[xi][yi]; }
+	double get_s(int xi, int yi) const { return s[xi][yi]; }
+
+
 
 	// write the state to file
+	void save_state(std::string path, std::string name) const;
+	void save_state_1d(std::string path, std::string name) const;
+
+	void save_flux(std::string path, std::string name) const;
+	void save_xy(std::string path, std::string name) const;
+
     void save_r(std::ofstream& out) const;
     void save_s(std::ofstream& out) const;
     void save_x(std::ofstream& out) const;
@@ -36,11 +49,16 @@ public:
 	void save_jx1(std::ofstream& out) const;
 	void save_jy1(std::ofstream& out) const;
 
+	// parameters
+	int get_Nx() const {return Nx;}
+	int get_Ny() const {return Ny;}
+	double get_dx() const {return dx;}
+	double get_dy() const {return dy;}
+
 private:
 
     // PRIVATE MEMBER FUNCTIONS
     void next_flux();
-    void next_flux_pbc();
     void next_prob();
 
 
@@ -53,8 +71,6 @@ private:
     double d, D;       // diff. const. of RT
     double temp;
 
-    bool periodic;  // periodic BC
-    double Lx, Ly;       // system size
     int Nx;          // number of bins
     double dx;
     int Ny;
@@ -82,6 +98,8 @@ private:
 };
 
 
-
+bool steady_state( const std::vector<std::vector<double> >& r,
+				   const std::vector<std::vector<double> >& s,
+				   const System& system, double epsilon);
 
 #endif

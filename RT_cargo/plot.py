@@ -3,16 +3,21 @@ import matplotlib.pyplot as plt
 from sys import exit
 from scipy.integrate import simps
 
+dirname = "data/"
 L = 10.
 alpha = 0
 d = 1.
 v = 0.
 
-r = np.loadtxt("r.dat", delimiter=';')
-x = np.loadtxt("x.dat")
-y = np.loadtxt("y.dat")
+r = np.loadtxt(dirname+"r.dat", delimiter=';')
+x = np.loadtxt(dirname+"x.dat")
+dx = x[1] - x[0]
+y = np.loadtxt(dirname+"y.dat")
+dy = y[1] - y[0]
+y = np.loadtxt(dirname+"y.dat")
+dx = x[1] - x[0]
 #s = np.loadtxt("s.dat", delimiter=';')
-#print(sum(sum(r)))
+#print(sum(sum(r))*dx*dy )
 
 xmin = x[0]
 xmax = x[-1]
