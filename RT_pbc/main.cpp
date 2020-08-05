@@ -17,6 +17,8 @@ typedef vector<vector<double> > matrix;
 
 int main()
 {
+
+	// Read variable values
     ConfigFile config("input.txt");
     // system size
     double Lx = config.read<double>("Lx");
@@ -40,7 +42,6 @@ int main()
     double gamma = config.read<double>("gamma");
     double Gamma = config.read<double>("Gamma");
     double temp = config.read<double>("temp");
-
 
     // integration time 
     double dt   = config.read<double>("dt");
