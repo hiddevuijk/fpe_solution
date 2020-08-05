@@ -1,0 +1,30 @@
+#ifndef GUARD_POTENTIAL_H
+#define GUARD_POTENTIAL_H
+
+#include <math.h>
+
+class Potential{
+public:
+    Potential(double k, double L = 0)
+        : k(k), L2(L/2){}
+
+    double U(double x, double y) const { return 0.5*k*(x - y)*(x - y); }
+    double F(double x, double y) const { return k*(y - x); }
+    //double F_pbc(double x, double y) const { return k*(y - x); }
+    double F_pbc(double x, double y) const
+	{ 
+		double d = fabs(x-y);
+		if(d<L2) {
+			return -k*(y-x);
+		} else {
+			if( x > y) return -k*(d-L2);
+			else return k*(d-L2);
+		}
+	}
+
+private:
+    double k;
+	double L2;
+};
+
+#endif
