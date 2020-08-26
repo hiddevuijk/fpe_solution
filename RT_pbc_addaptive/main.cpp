@@ -112,7 +112,7 @@ int main()
     dt = dtNeumann*NEmax/10;
     std::vector<double> dtList;
     int ncheckError =10;
-    double dtmin = 1.e-4;
+    double dtmin = 1.e-8;
 
     double dTimesave = 0;
     double e = 0;

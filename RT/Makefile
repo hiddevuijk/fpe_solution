@@ -1,5 +1,5 @@
 TARGET = test.exe
-OBJS = main.o  system.o 
+OBJS = main.o system.o
 CC = g++
 #CFLAGS = -c -Wall -g -std=c++11
 #LFLAGS = -Wall -g
@@ -14,15 +14,15 @@ system.o: system.cpp system.h swimspeed.h potential.h
 	$(CC) $(CFLAGS) system.cpp
 
 
-main.o: main.cpp  system.h swimspeed.h potential.h
+main.o: main.cpp  system.h swimspeed.h potential.h ConfigFile.h
 	$(CC) $(CFLAGS) main.cpp
 
 
 .PHONY: clean
 clean:
-	rm -f  $(OBJS) $(TARGET) 
+	rm -f  $(OBJS)
 
 .PHONY: cleanObject
-cleanObject:
-	rm -f  $(OBJS)
+cleanAll:
+	rm -f  $(OBJS) $(TARGET)
 
