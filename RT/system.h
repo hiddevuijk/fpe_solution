@@ -64,13 +64,6 @@ private:
     void next_flux();
     void next_prob(double dt);
 
-    // get dummy state
-    void next_flux_dummy1();
-    void next_flux_dummy2();
-    void next_prob_dummy1(double dt);
-    void next_prob_dummy2(double dt);
-
-    double error();
 
     // SYSTEM PARAMETERS
     Swimspeed swimspeed;
@@ -104,20 +97,12 @@ private:
     std::vector<std::vector<double> > jx1;
     std::vector<std::vector<double> > jy1;
 
-    // dummy state for error calculation
-    std::vector<std::vector<double> > rD;
-    // zeroth moment of the flux
-    std::vector<std::vector<double> > jx0D;
-    std::vector<std::vector<double> > jy0D;
-    // first moment of the prob. density
-    std::vector<std::vector<double> > sD;
-    // first moment of the flux
-    std::vector<std::vector<double> > jx1D;
-    std::vector<std::vector<double> > jy1D;
-
-
 
 };
+
+double steady_state_error( const std::vector<std::vector<double> >& r,
+				   const std::vector<std::vector<double> >& s,
+				   const System& system);
 
 
 bool steady_state( const std::vector<std::vector<double> >& r,

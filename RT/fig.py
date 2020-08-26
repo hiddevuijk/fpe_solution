@@ -5,13 +5,12 @@ from scipy.integrate import simps
 from norm import norm_array
 
 from chemtax import cn 
-from functions import rho as rhoR_analytical
-from functions import rho2 as rho2R_analytical
+from functions import rho2 as rhoR_analytical
 
 from small_friction import rho as rho_limit
 
 q =  4.
-kg = 0.
+kg = 15
 v0 = 10.
 vp = 10.
 x0 = 0
@@ -41,19 +40,12 @@ vlist = abs(vlist)
 vavg = dR*np.sum(vlist)/(L)
 
 
-rhoA = rhoR_analytical(vlist, dR,alpha,D,q)
-rho2A = rho2R_analytical(vlist, dR,alpha,D,q,kg)
+rhoA = rhoR_analytical(vlist, dR,alpha,D,q, kg)
 
-c = dR * np.sum( (vlist-vavg)*(rhoR -rhoavg) ) /( vavg*rhoavg* L)
 
-c1 = cn(R,rhoR,abs(vlist),1)
-c2 = cn(R,rhoR,vlist,2)
-#print(c1,c2)
 
 plt.plot(R,rhoR*L - 1, label="Numerical")
-plt.plot(R,rhoA*L - 1, label="Analytical")
-#plt.plot(R,rho2A*L - 1, label="Analytical2")
-#plt.plot(R,rho3A*L - 1, label="Analytical2")
+plt.plot(R,rhoA*L - 1, label="Analytical2")
 plt.ylabel(r"$\frac{\rho(R)}{\rho_b} - 1$", rotation=0, fontsize=10,labelpad=10)
 plt.xlabel(r"$R$")
 #plt.title( r"$q = {:1.2f} ~~ D={:1.1f} ~~ c_1 = {:1.5f}  ~~ c_2={:1.5f} $".format(q,D, c1, c2))

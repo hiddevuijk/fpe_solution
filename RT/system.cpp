@@ -19,13 +19,7 @@ System::System( Swimspeed swimspeed, Potential potential,
     jy0( Nx, std::vector<double>(Ny+1) ),
     s( Nx, std::vector<double>(Ny) ),
     jx1( Nx+1, std::vector<double>(Ny) ),
-    jy1( Nx, std::vector<double>(Ny+1) ),
-    rD( Nx, std::vector<double>(Ny) ),
-    jx0D( Nx+1, std::vector<double>(Ny) ),
-    jy0D( Nx, std::vector<double>(Ny+1) ),
-    sD( Nx, std::vector<double>(Ny) ),
-    jx1D( Nx+1, std::vector<double>(Ny) ),
-    jy1D( Nx, std::vector<double>(Ny+1) )
+    jy1( Nx, std::vector<double>(Ny+1) )
 
 {
     q = Gamma/gamma;
@@ -47,25 +41,6 @@ void System::next_time(double dt)
 {
 	next_flux();
 	next_prob(dt);
-}
-
-double System::next_time_check_error(double dt)
-{
-    //next_flux_dummy1();
-    //next_prob_dummy1(dt/3.);
-    //
-    //next_flux_dummy2();
-    //next_prob_dummy2(dt/3.);
-
-    //next_flux_dummy2();
-    //next_prob_dummy2(dt/3.);
-
-
-    next_flux();
-    next_prob(dt);
-
-    return this->error()*dt;
-
 }
 
 void System::next_prob(double dt)
@@ -146,200 +121,6 @@ void System::next_flux()
 
 }
 
-
-void System::next_prob_dummy1(double dt)
-{
-    for(int xi=0; xi<Nx; ++xi) {
-        for(int yi=0; yi<Ny; ++yi) {
-            rD[xi][yi] = r[xi][yi];
-            rD[xi][yi] -= dt*( jx0D[xi+1][yi] - jx0D[xi][yi] )/dx;
-            rD[xi][yi] -= dt*( jy0D[xi][yi+1] - jy0D[xi][yi] )/dy;
-
-            sD[xi][yi] = (1 - dt*swimspeed.get_alpha() )*s[xi][yi];
-            sD[xi][yi] -= dt*( jx1D[xi+1][yi] - jx1D[xi][yi] )/dx;
-            sD[xi][yi] -= dt*( jy1D[xi][yi+1] - jy1D[xi][yi] )/dy;
-
-        }
-    }
-}
-
-void System::next_prob_dummy2(double dt)
-{
-    for(int xi=0; xi<Nx; ++xi) {
-        for(int yi=0; yi<Ny; ++yi) {
-            rD[xi][yi] -= dt*( jx0D[xi+1][yi] - jx0D[xi][yi] )/dx;
-            rD[xi][yi] -= dt*( jy0D[xi][yi+1] - jy0D[xi][yi] )/dy;
-
-            sD[xi][yi] -= dt*swimspeed.get_alpha()*sD[xi][yi];
-            sD[xi][yi] -= dt*( jx1D[xi+1][yi] - jx1D[xi][yi] )/dx;
-            sD[xi][yi] -= dt*( jy1D[xi][yi+1] - jy1D[xi][yi] )/dy;
-
-        }
-    }
-}
-
-void System::next_flux_dummy1()
-{
-
-    // bulk	
-    for(int xi=0; xi<Nx; ++xi) {
-        double xmid = x[xi] - 0.5*dx;
-
-        for(int yi=0; yi<Ny; ++yi) {
-            double ymid = y[yi] - 0.5*dy;
-
-
-            // x index to the left
-            double xl = ( xi == 0 ) ? Nx - 1 : xi-1;
-
-            // postition of the active particle
-            double X = xmid + q*y[yi]/(1+q);
-
-
-            jx0D[xi][yi]  = swimspeed.v(X) * ( s[xl][yi] + s[xi][yi] ) / 2;
-            jx0D[xi][yi] -= d * ( r[xi][yi] - r[xl][yi] ) / dx;
-            jx0D[xi][yi] /= 1 + q;
-
-            jx1D[xi][yi]  = swimspeed.v(X) * ( r[xl][yi] + r[xi][yi] ) / 2;
-            jx1D[xi][yi] -= d * ( s[xi][yi] - s[xl][yi] ) / dx;
-            jx1D[xi][yi] /= 1 + q;
-
-            if( yi != 0) {
-
-                // postition of the active particle
-                double X = x[xi] + q*ymid/(1+q);
-
-                jy0D[xi][yi]  = swimspeed.v(X) * ( s[xi][yi-1] + s[xi][yi] ) / 2;
-                jy0D[xi][yi] += (1+1/q) * potential.F(ymid) * ( r[xi][yi-1] + r[xi][yi] ) /(2*gamma);
-                jy0D[xi][yi] -= (1+1/q)*d*( r[xi][yi] - r[xi][yi-1] )/dy;
-
-                jy1D[xi][yi]  = swimspeed.v(X) * ( r[xi][yi-1] + r[xi][yi] ) / 2;
-                jy1D[xi][yi] += (1+1/q) * potential.F(ymid) * ( s[xi][yi-1] + s[xi][yi] ) /(2*gamma);
-                jy1D[xi][yi] -= (1+1/q)*d*( s[xi][yi] - s[xi][yi-1] )/dy;
-
-            }
-        }
-    }
-
-    // reflecting bc for y
-    for(int xi=0; xi<Nx; ++xi) {
-        jy0D[xi][0] = 0;
-        jy0D[xi][Ny] = 0;
-
-        jy1D[xi][0] = 0;
-        jy1D[xi][Ny] = 0;
-    }
-
-	// periodic bc in x
-	for(int yi=0; yi<Ny; ++yi) {
-		jx0D[Nx][yi] = jx0D[0][yi];
-		jx1D[Nx][yi] = jx1D[0][yi];
-	}
-   
-
-
-}
-
-void System::next_flux_dummy2()
-{
-
-    // bulk	
-    for(int xi=0; xi<Nx; ++xi) {
-        double xmid = x[xi] - 0.5*dx;
-
-        for(int yi=0; yi<Ny; ++yi) {
-            double ymid = y[yi] - 0.5*dy;
-
-
-            // x index to the left
-            double xl = ( xi == 0 ) ? Nx - 1 : xi-1;
-
-            // postition of the active particle
-            double X = xmid + q*y[yi]/(1+q);
-
-
-            jx0D[xi][yi]  = swimspeed.v(X) * ( sD[xl][yi] + sD[xi][yi] ) / 2;
-            jx0D[xi][yi] -= d * ( rD[xi][yi] - rD[xl][yi] ) / dx;
-            jx0D[xi][yi] /= 1 + q;
-
-            jx1D[xi][yi]  = swimspeed.v(X) * ( rD[xl][yi] + rD[xi][yi] ) / 2;
-            jx1D[xi][yi] -= d * ( sD[xi][yi] - sD[xl][yi] ) / dx;
-            jx1D[xi][yi] /= 1 + q;
-
-            if( yi != 0) {
-
-                // postition of the active particle
-                double X = x[xi] + q*ymid/(1+q);
-
-                jy0D[xi][yi]  = swimspeed.v(X) * ( sD[xi][yi-1] + sD[xi][yi] ) / 2;
-                jy0D[xi][yi] += (1+1/q) * potential.F(ymid) * ( rD[xi][yi-1] + rD[xi][yi] ) /(2*gamma);
-                jy0D[xi][yi] -= (1+1/q)*d*( rD[xi][yi] - rD[xi][yi-1] )/dy;
-
-                jy1D[xi][yi]  = swimspeed.v(X) * ( rD[xi][yi-1] + rD[xi][yi] ) / 2;
-                jy1D[xi][yi] += (1+1/q) * potential.F(ymid) * ( sD[xi][yi-1] + sD[xi][yi] ) /(2*gamma);
-                jy1D[xi][yi] -= (1+1/q)*d*( sD[xi][yi] - sD[xi][yi-1] )/dy;
-
-            }
-        }
-    }
-
-    // reflecting bc for y
-    for(int xi=0; xi<Nx; ++xi) {
-        jy0D[xi][0] = 0;
-        jy0D[xi][Ny] = 0;
-
-        jy1D[xi][0] = 0;
-        jy1D[xi][Ny] = 0;
-    }
-
-	// periodic bc in x
-	for(int yi=0; yi<Ny; ++yi) {
-		jx0D[Nx][yi] = jx0D[0][yi];
-		jx1D[Nx][yi] = jx1D[0][yi];
-	}
-   
-
-
-}
-
-double System::error()
-{
-
-    double emaxX = 0;
-    double emaxY = 0;
-    double e; 
-    for(int xi=0;xi<Nx;++xi){
-        for(int yi=0;yi<Ny;++yi){
-            if( r[xi][yi] > 0) {
-                e = fabs(jx0[xi][yi])/r[xi][yi]; 
-                if(e > emaxX ) emaxX = e;
-                e = fabs(jx1[xi][yi])/r[xi][yi]; 
-                if(e > emaxX ) emaxX = e;
-                e = fabs(jy0[xi][yi])/r[xi][yi]; 
-                if(e > emaxY ) emaxY = e;
-                e = fabs(jy1[xi][yi])/r[xi][yi]; 
-                if(e > emaxY ) emaxY = e;
-
-            }
-        }
-    }
-    if( emaxX/dx > emaxY/dy) {
-        return emaxX/dx;
-    } else {
-        return emaxY/dy;
-    }
-    //double e = 0;
-    //double de;
-    //for(int xi=0;xi<Nx;++xi){
-    //    for(int yi=0;yi<Ny;++yi) {
-    //        de = r[xi][yi] - rD[xi][yi];
-    //        e += de*de;
-    //        //de = s[xi][yi] - sD[xi][yi];
-    //        //e += de*de;
-    //    }
-    //}
-    //return e/(Nx*Ny);
-}
 
 /*
 	get rx, ry
@@ -585,6 +366,25 @@ void System::save_jy1( std::ofstream& out ) const
 	NONMEMBER FUNCTIONS
 */
 
+double steady_state_error( const std::vector<std::vector<double> >& r,
+				   const std::vector<std::vector<double> >& s,
+				   const System& system)
+{
+
+	double diff = 0;
+	double dx = system.get_dx();
+	double dy = system.get_dy();
+
+	for(int xi=0; xi<system.get_Nx(); ++xi) {
+		for(int yi=0; yi<system.get_Ny(); ++yi) {
+			diff += dx*dy*fabs( r[xi][yi] - system.get_r(xi,yi) );
+			diff += dx*dy*fabs( s[xi][yi] - system.get_s(xi,yi) );
+		}
+	}
+
+    return diff;
+
+}
 bool steady_state( const std::vector<std::vector<double> >& r,
 				   const std::vector<std::vector<double> >& s,
 				   const System& system, double epsilon)

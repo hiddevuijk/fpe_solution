@@ -54,8 +54,6 @@ int main()
 
 	double epsilon = config.read<double>("epsilon");
 
-    double dxEmax = config.read<double>("dxEmax");
-    double NEmax = config.read<double>("NEmax");
 
 
 	int Nss = config.read<int>("Nss");
@@ -88,6 +86,7 @@ int main()
     int ni = 0;
 
 	bool steadyState = false;
+    double steadyStateError;
 
 	string dirname = "data/";
 
@@ -109,35 +108,16 @@ int main()
         cout << (v0+vp)*dt/dy << endl;
     }
          
-    dt = dtNeumann*NEmax/10;
     std::vector<double> dtList;
-    int ncheckError =10;
-    double dtmin = 1.e-8;
+
 
     double dTimesave = 0;
-    double e = 0;
     while( t < time  and steadyState == false ) {
         
-        if( ti % ncheckError == 0  ){
-    
-            e = system.next_time_check_error(dt);
-            t += dt;
-            ti += 1;
-            dTimesave += dt;
-            if( e > dxEmax ) {
-                dt /= 1.5;
-            } else{
-                dt *= 1.020;
-            }
-            if( dt > dtNeumann*NEmax ) dt = dtNeumann*NEmax;
-            if( dt < dtmin) dt = dtmin;
-            
-        } else {
-            system.next_time(dt);
-            t += dt;
-            dTimesave += dt;
-            ti += 1;
-        }
+        system.next_time(dt);
+        t += dt;
+        dTimesave += dt;
+        ti += 1;
         dtList.push_back(dt);
 
         if( dTimesave > Tsave ) {
@@ -145,8 +125,8 @@ int main()
             cout << "ni\t" << ni << endl;
             cout << "t\t" << t << endl;
             cout << "dt\t"<< dt << endl;
-            cout << "eN\t" << dtNeumann*NEmax << endl;
-            cout << "dx\t" << e << endl;
+            cout << "eps\t" << epsilon << endl;
+            cout << "err\t" << steadyStateError << endl;
             cout <<"----------"<< endl;
             dTimesave -= Tsave;
 
@@ -163,7 +143,8 @@ int main()
         }
 		if( (ti % Nss ) == 0 ) {
 
-			steadyState = steady_state(rInit, sInit, system, epsilon);
+			steadyStateError = steady_state_error(rInit, sInit, system);
+            steadyState = steadyStateError < epsilon;
 
 			rInit = system.get_r();
 			sInit = system.get_s();
