@@ -5,7 +5,6 @@ from matplotlib.widgets import Slider, Button
 from scipy.integrate import simps
 from sys import exit
 
-from functions import rho as rhoR_analytical
 from functions import rho2 as rho2R_analytical
 
 dirname = "data/"
@@ -95,10 +94,10 @@ slider.on_changed(update)
 sliderYval.on_changed(updateYval)
 
 if True:
-    q =  1.0488
-    kg = 1.
-    v0 = 5.
-    vp = 5.
+    q =  4.
+    kg = 0
+    v0 = 10.
+    vp = 10.
     x0 = 0
     alpha = 40
     D = 1.
@@ -111,15 +110,15 @@ if True:
     dR = R[1] - R[0]
     vlist = v(R,v0,vp,x0)
 
-    rhoA = rhoR_analytical(vlist, dR,alpha,D,q)
+    #rhoA = rhoR_analytical(vlist, dR,alpha,D,q)
     rho2A = rho2R_analytical(vlist, dR,alpha,D,q,kg)
 
-    norm = sum(rhoA)*dR
-    rhoA /= norm
+    #norm = sum(rhoA)*dR
+    #rhoA /= norm
     norm = sum(rho2A)*dR
     rho2A /= norm
 
-    ax.plot(R,rhoA*Lx, label="Analytical")
+    #ax.plot(R,rhoA*Lx, label="Analytical")
     ax.plot(R,rho2A*Lx, label="Analytical2")
 
 ax.legend()

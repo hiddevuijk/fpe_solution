@@ -10,7 +10,7 @@ from functions import rho2 as rhoR_analytical
 from small_friction import rho as rho_limit
 
 q =  4.
-kg = 8.
+kg = 0.
 v0 = 10.
 vp = 10.
 x0 = 0
@@ -45,9 +45,10 @@ rhoA = rhoR_analytical(vlist, dR,alpha,D,q, kg)
 
 
 plt.plot(R,rhoR*L - 1, label="Numerical")
-plt.plot(R,rhoA*L - 1, label="Analytical")
+plt.plot(R,rhoA*L - 1, label="Analytical2")
 plt.ylabel(r"$\frac{\rho(R)}{\rho_b} - 1$", rotation=0, fontsize=10,labelpad=10)
 plt.xlabel(r"$R$")
+#plt.title( r"$q = {:1.2f} ~~ D={:1.1f} ~~ c_1 = {:1.5f}  ~~ c_2={:1.5f} $".format(q,D, c1, c2))
 plt.title( r"$q = {:1.2f} ~~ D={:1.1f}  $".format(q,D))
 plt.legend()
 plt.tight_layout()

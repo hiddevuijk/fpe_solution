@@ -1,11 +1,11 @@
 # box size 
 Lx = 100
-Nx = 25
-Ly = 4
-Ny = 50
+Nx = 20
+Ly = 5.
+Ny = 100
 
 # potential
-k = 8.
+k = 0.
 
 #swims tumble
 v0 = 10
@@ -19,10 +19,10 @@ Gamma = 4.
 temp = 1.
 
 #integration
-dt = 0.001
-time = 100.
+dt = 0.0005
+time = 1000.
 
-Nsave = 1.
+Nsave = 10
 
 dxEmax = 1.
 NEmax = 1.
@@ -31,4 +31,4 @@ Nprint = 10
 saveXY = 0
 
 epsilon = 0.0000000001
-Nss = 1000000000
+Nss = 250
