@@ -180,6 +180,34 @@ void System::set_init()
 void System::read_init()
 {
 
+    std::ifstream file_rho("data/r.dat");
+    std::ifstream file_sig("data/s.dat");
+
+
+    std::string line_rho, line_sig, word;
+    int ri = 0;
+    for(int xi=0;xi<Nx; ++xi) {
+        file_rho >> line_rho;
+        file_sig >> line_sig;
+        for(int yi=0;yi<Ny-1; ++yi) {
+            ri = line_rho.find(';');       
+            word = line_rho.substr(0, ri); 
+            line_rho = line_rho.erase(0, ri+1);
+            r[xi][yi] = std::stod(word);
+
+            ri = line_sig.find(';');       
+            word = line_sig.substr(0, ri); 
+            line_sig = line_sig.erase(0, ri+1);
+            s[xi][yi] = std::stod(word);
+
+        }
+        ri = line_rho.find(';');       
+        word = line_rho.substr(0, ri); 
+        r[xi][Ny-1] = std::stod(word);
+        ri = line_sig.find(';');       
+        word = line_sig.substr(0, ri); 
+        s[xi][Ny-1] = std::stod(word);
+    }
 
 
 }
