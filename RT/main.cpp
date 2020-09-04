@@ -9,9 +9,11 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <filesystem>
 
 
 using namespace std;
+
 
 typedef vector<vector<double> > matrix;
 
@@ -56,7 +58,7 @@ int main()
 
 
 
-	int Nss = config.read<int>("Nss");
+	double Tss = config.read<double>("Tss");
 
 	cout << "Neumann criterion: \n";	
     cout << "x: \t" << temp*dt*(1+gamma/Gamma)/(gamma*dx*dx) << "\n";
@@ -112,17 +114,19 @@ int main()
 
 
     double dTimesave = 0;
+    double dTss = 0;
     while( t < time  and steadyState == false ) {
         
         system.next_time(dt);
         t += dt;
         dTimesave += dt;
+        dTss += dt;
         ti += 1;
         dtList.push_back(dt);
 
         if( dTimesave > Tsave ) {
             cout <<"----------"<< endl;
-            cout << "ni\t" << ni << endl;
+            cout << "ni\t" << ni<< endl;
             cout << "t\t" << t << endl;
             cout << "dt\t"<< dt << endl;
             cout << "eps\t" << epsilon << endl;
@@ -141,16 +145,16 @@ int main()
 
 			tList.push_back(t);
         }
-		if( (ti % Nss ) == 0 ) {
-
+		if( dTss > Tss ) {
+            dTss = 0;
 			steadyStateError = steady_state_error(rInit, sInit, system);
             steadyState = steadyStateError < epsilon;
 
 			rInit = system.get_r();
 			sInit = system.get_s();
 		}
-
     }
+    cout << t << endl << endl;
 
 	system.save_state(dirname, "");
 	system.save_state_1d(dirname, "");

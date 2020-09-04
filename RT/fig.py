@@ -9,8 +9,8 @@ from functions import rho2 as rhoR_analytical
 
 from small_friction import rho as rho_limit
 
-q =  4.
-kg = 15
+q =  .25
+kg = 16
 v0 = 10.
 vp = 10.
 x0 = 0
@@ -41,6 +41,7 @@ vavg = dR*np.sum(vlist)/(L)
 
 
 rhoA = rhoR_analytical(vlist, dR,alpha,D,q, kg)
+
 
 
 

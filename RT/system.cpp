@@ -177,6 +177,12 @@ void System::set_init()
 
 }
 
+void System::read_init()
+{
+
+
+}
+
 /*
 	Save the state of the function
 */
@@ -382,7 +388,7 @@ double steady_state_error( const std::vector<std::vector<double> >& r,
 		}
 	}
 
-    return diff;
+    return diff/(system.get_Nx()*dx*system.get_Ny()*dy);
 
 }
 bool steady_state( const std::vector<std::vector<double> >& r,
