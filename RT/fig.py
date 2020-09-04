@@ -17,9 +17,10 @@ x0 = 0
 alpha = 40
 D = 1.
 
-rho = np.loadtxt("data/r.dat", delimiter=';')
-R = np.loadtxt("data/x.dat")
-r = np.loadtxt("data/y.dat")
+dirname = "data2/"
+rho = np.loadtxt(dirname+"r.dat", delimiter=';')
+R = np.loadtxt(dirname+"x.dat")
+r = np.loadtxt(dirname+"y.dat")
 dR = R[1] - R[0]
 dr = r[1] - r[0]
 L = 2*R[-1]+dR

@@ -8,7 +8,7 @@ from sys import exit
 from functions import rho2 as rho2R_analytical
 
 dirname = "data/"
-Nfig = 105
+Nfig = 1000
 
 fig, ax = plt.subplots()
 fig.subplots_adjust(bottom=0.2)
@@ -95,7 +95,7 @@ sliderYval.on_changed(updateYval)
 
 if True:
     q =  0.25
-    kg = 16.
+    kg = 0.
     v0 = 10.
     vp = 10.
     x0 = 0

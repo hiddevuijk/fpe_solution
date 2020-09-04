@@ -50,7 +50,7 @@ int main()
     double time = config.read<double>("time");
     
     //int Nprint = config.read<int>("Nprint");
-    double Tsave = config.read<double>("Nsave");
+    double Tsave = config.read<double>("Tsave");
 
 	bool saveXY = config.read<bool>("saveXY");
 
@@ -59,7 +59,7 @@ int main()
 
 	double Tss = config.read<double>("Tss");
 
-	string dirname = config.read<string>(dirname);
+	string dirname = config.read<string>("dirname");
     bool restart = config.read<bool>("restart");
     
 	cout << "Neumann criterion: \n";	
@@ -90,6 +90,8 @@ int main()
     } else {
         system.set_init();
     }
+
+    dirname += "/";
 
 	vector<double> tList;
     double t = 0;
