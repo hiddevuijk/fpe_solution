@@ -57,9 +57,11 @@ int main()
 	double epsilon = config.read<double>("epsilon");
 
 
-
 	double Tss = config.read<double>("Tss");
 
+	string dirname = config.read<string>(dirname);
+    bool restart = config.read<bool>("restart");
+    
 	cout << "Neumann criterion: \n";	
     cout << "x: \t" << temp*dt*(1+gamma/Gamma)/(gamma*dx*dx) << "\n";
     cout << "y: \t" << temp*dt/(gamma*dy*dy*(1+Gamma/gamma)) << "\n";
@@ -80,7 +82,14 @@ int main()
     System system(swimspeed, potential, gamma, Gamma, temp,
                  Nx, dx, Ny, dy, rInit, sInit);
 
-    system.set_init();
+    if( restart ) {
+        system.read_init(dirname);
+        dirname = config.read<string>("new_dirname");
+        rInit = system.get_r();
+        sInit = system.get_s();
+    } else {
+        system.set_init();
+    }
 
 	vector<double> tList;
     double t = 0;
@@ -90,7 +99,6 @@ int main()
 	bool steadyState = false;
     double steadyStateError;
 
-	string dirname = "data/";
 
 	tList.push_back(0);
 
@@ -99,11 +107,6 @@ int main()
 
 
    
-    double q = Gamma/gamma; 
-    double dtNeumannR = dx*dx*gamma*(1+q)/(2*temp);
-    double dtNeumannr = dy*dy*gamma*q/(2*temp*(1+q));
-    double dtNeumann =  dtNeumannR < dtNeumannr ? dtNeumannR : dtNeumannr;
-
     if(dx < dy) {
         cout << (v0+vp)*dt/dx << endl;
     } else {

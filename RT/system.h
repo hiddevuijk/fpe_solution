@@ -21,7 +21,7 @@ public:
     double next_time_check_error(double dt);
 
     void set_init();
-    void read_init();
+    void read_init(std::string);
 
 	// get state of the system
     std::vector<std::vector<double> > get_r() const { return r;}

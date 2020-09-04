@@ -177,11 +177,11 @@ void System::set_init()
 
 }
 
-void System::read_init()
+void System::read_init(std::string dirname)
 {
 
-    std::ifstream file_rho("data/r.dat");
-    std::ifstream file_sig("data/s.dat");
+    std::ifstream file_rho(dirname+"/r.dat");
+    std::ifstream file_sig(dirname+"/s.dat");
 
 
     std::string line_rho, line_sig, word;
@@ -208,7 +208,6 @@ void System::read_init()
         word = line_sig.substr(0, ri); 
         s[xi][Ny-1] = std::stod(word);
     }
-
 
 }
 

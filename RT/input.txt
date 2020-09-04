@@ -31,3 +31,8 @@ saveXY = 0
 
 epsilon = 0.00000001
 Tss = 2.5
+
+dirname = data
+
+restart = 1
+new_dirname = data2
